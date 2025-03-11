@@ -1,0 +1,31 @@
+Ayush Aditya
+1BM23CS057
+#include<stdio.h>
+
+int main(){
+    printf("Enter the no of processes : ");
+    int n;
+    scanf("%d", &n);
+    int burst[n];
+    printf("\n Enter the burst time for each process : ");
+    for(int i = 0; i < n; i++){
+        scanf("%d", &burst[i]);
+    }
+    int tat[n], wt[n];
+    int wtavg = 0, tatavg = burst[0];
+    wt[0] = 0;
+    tat[0] = 0;
+    for(int i =1; i < n; i++){
+        wt[i] = wt[i-1]+burst[i-1];
+        tat[i] = tat[i-1]+burst[i];
+        tatavg += tat[i];
+        wtavg += wt[i];
+    }
+    printf("\n \t Process \t Burst time \t Waiting time \t turn around time");
+    for(int i = 0; i < n; i++){
+        printf("\n \t %d \t %d \t %d \t %d", (i+1), burst[i], wt[i], tat[i]);
+    }
+    printf("\n Average tat  is %f", (tatavg/n));
+    printf("\n Average wt is % f",  (wtavg/n));
+
+}
