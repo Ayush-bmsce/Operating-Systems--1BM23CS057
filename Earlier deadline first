@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    int task_id;
+    int execution_time;
+    int deadline;
+    int remaining_time;
+} Task;
+
+int compare_deadline(const void *a, const void *b) {
+    Task *task_a = (Task *)a;
+    Task *task_b = (Task *)b;
+    return task_a->deadline - task_b->deadline; // Earliest deadline first
+}
+
+void EDF_Scheduling(Task tasks[], int num_tasks) {
+    int time = 0;
+    int tasks_completed = 0;
+   
+    while (tasks_completed < num_tasks) {
+        // Sort tasks based on deadline (earliest first)
+        qsort(tasks, num_tasks, sizeof(Task), compare_deadline);
+
+        for (int i = 0; i < num_tasks; i++) {
+            // If the task is ready and has remaining time to execute
+            if (tasks[i].remaining_time > 0) {
+                printf("Time %d: Executing Task %d\n", time, tasks[i].task_id);
+                tasks[i].remaining_time--;
+                if (tasks[i].remaining_time == 0) {
+                    tasks_completed++;
+                    printf("Time %d: Task %d completed\n", time, tasks[i].task_id);
+                }
+                break;
+            }
+        }
+        time++;
+    }
+}
+
+int main() {
+    Task tasks[] = {
+        {1, 3, 5}, // Task 1: execution time 3, deadline 5
+        {2, 2, 7}, // Task 2: execution time 2, deadline 7
+        {3, 1, 4}  // Task 3: execution time 1, deadline 4
+    };
+
+    int num_tasks = sizeof(tasks) / sizeof(tasks[0]);
+    EDF_Scheduling(tasks, num_tasks);
+    return 0;
+}
